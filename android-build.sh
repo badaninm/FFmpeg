@@ -18,9 +18,11 @@
 ######################################################
 # change these three lines to adjust those to your local folders configuration
 
-NDK=/Volumes/Work/android-ndk-r14
+#NDK=/YOUR_ANDROID_NDK_PATH
 PLATFORM=$NDK/platforms/android-9/arch-arm
 PREBUILT=$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64
+
+: ${NDK?"Need to set NDK to android-ndk path"}
 
 function build_now
 {
