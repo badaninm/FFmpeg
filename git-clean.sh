@@ -1,0 +1,1 @@
+git clean -x -f -e /android -e /ios -e /ios-thin 

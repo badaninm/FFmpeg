@@ -2,11 +2,11 @@
 
 # directories
 SOURCE="."
-FAT="ffmpeg-ios"
+FAT="ios"
 
-SCRATCH="ffmpeg-ios-scratch"
+SCRATCH="ios-scratch"
 # must be an absolute path
-THIN=`pwd`/"ffmpeg-ios-thin"
+THIN=`pwd`/"ios-thin"
 
 # absolute path to x264 library
 #X264=`pwd`/fat-x264
