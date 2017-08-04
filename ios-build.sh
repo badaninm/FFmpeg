@@ -13,7 +13,7 @@ THIN=`pwd`/"ios-thin"
 
 #FDK_AAC=`pwd`/../fdk-aac-build-script-for-iOS/fdk-aac-ios
 
-CONFIGURE_FLAGS="--enable-cross-compile --optflags=-O3 --disable-debug --disable-programs \
+CONFIGURE_FLAGS="--enable-cross-compile --optflags=-O3 --enable-small --disable-debug --disable-programs \
                  --disable-doc --enable-pic"
 
 if [ "$X264" ]
@@ -29,7 +29,7 @@ fi
 # avresample
 #CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-avresample"
 
-ARCHS="armv7"
+ARCHS="armv7 arm64"
 
 COMPILE="y"
 LIPO="y"
@@ -128,7 +128,7 @@ then
 		    --prefix="$THIN/$ARCH" \
 		|| exit 1
 
-		make -j3 install $EXPORT || exit 1
+		make -j7 install $EXPORT || exit 1
 		cd $CWD
 	done
 fi
