@@ -18,7 +18,7 @@
 ######################################################
 # change these three lines to adjust those to your local folders configuration
 
-#NDK=/YOUR_ANDROID_NDK_PATH
+NDK=~/android-ndk-r14b
 PLATFORM=$NDK/platforms/android-9/arch-arm
 PREBUILT=$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64
 
@@ -29,20 +29,36 @@ function build_now
 ./configure \
     --disable-shared \
     --enable-static \
+    --enable-encoders \
+    --enable-nonfree \
     --enable-gpl \
     --enable-version3 \
-    --enable-nonfree \
-    --disable-doc \
-    --disable-ffmpeg \
+    --enable-parsers \
+    --enable-encoders \
+    --enable-decoders \
+    --enable-muxers \
+    --enable-demuxers \
+    --enable-swscale \
+    --enable-swscale-alpha \
     --disable-ffplay \
     --disable-ffprobe \
-    --disable-ffserver \
-    --disable-postproc \
+    --enable-ffserver \
+    --enable-network \
+    --enable-indevs \
+    --disable-bsfs \
+    --enable-filters \
+    --enable-avfilter \
+    --enable-protocols \
+    --disable-asm \
+    --enable-neon \
+    --enable-nonfree \
+    --enable-small --disable-debug --disable-programs \
+    --disable-doc \
     --enable-small \
     --cross-prefix=$PREBUILT/bin/arm-linux-androideabi- \
     --enable-cross-compile \
     --target-os=linux \
-    --extra-cflags="-I$PLATFORM/usr/include -Wno-traditional" \
+    --extra-cflags="-I$PLATFORM/usr/include -I`pwd`/libavcodec -Wno-traditional" \
     --extra-ldflags="-L$PLATFORM/usr/lib -nostdlib -Wl,-rpath-link=$PLATFORM/usr/lib" \
     --prefix="$PREFIX" \
     --arch=arm \
