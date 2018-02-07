@@ -3302,10 +3302,10 @@ SLIBPREF="lib"
 SLIBSUF=".so"
 SLIBNAME='$(SLIBPREF)$(FULLNAME)$(SLIBSUF)'
 SLIBNAME_WITH_VERSION='$(SLIBNAME).$(LIBVERSION)'
-SLIBNAME_WITH_MAJOR='$(SLIBNAME).$(LIBMAJOR)'
+SLIBNAME_WITH_MAJOR='$(SLIBPREF)$(FULLNAME)-$(LIBMAJOR)$(SLIBSUF)'
 LIB_INSTALL_EXTRA_CMD='$$(RANLIB) "$(LIBDIR)/$(LIBNAME)"'
-SLIB_INSTALL_NAME='$(SLIBNAME_WITH_VERSION)'
-SLIB_INSTALL_LINKS='$(SLIBNAME_WITH_MAJOR) $(SLIBNAME)'
+SLIB_INSTALL_NAME='$(SLIBNAME_WITH_MAJOR)'
+SLIB_INSTALL_LINKS='$(SLIBNAME)'
 VERSION_SCRIPT_POSTPROCESS_CMD="cat"
 
 asflags_filter=echo
@@ -5914,11 +5914,7 @@ enabled omx               && { check_header OMX_Core.h ||
                                     add_cflags -isystem/opt/vc/include/IL ; }
                                 check_header OMX_Core.h ; } ||
                                die "ERROR: OpenMAX IL headers not found"; }
-enabled openssl           && { use_pkg_config openssl openssl/ssl.h OPENSSL_init_ssl ||
-                               use_pkg_config openssl openssl/ssl.h SSL_library_init ||
-                               check_lib openssl/ssl.h SSL_library_init -lssl -lcrypto ||
-                               check_lib openssl/ssl.h SSL_library_init -lssl32 -leay32 ||
-                               check_lib openssl/ssl.h SSL_library_init -lssl -lcrypto -lws2_32 -lgdi32 ||
+enabled openssl           && { check_lib  zlib.h      zlibVersion    -lz  ||
                                die "ERROR: openssl not found"; }
 enabled qtkit_indev      && { check_header_objcc QTKit/QTKit.h || disable qtkit_indev; }
 

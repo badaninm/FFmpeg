@@ -19,7 +19,7 @@
 # change these three lines to adjust those to your local folders configuration
 
 NDK=~/android-ndk-r14b
-PLATFORM=$NDK/platforms/android-9/arch-arm
+PLATFORM=$NDK/platforms/android-14/arch-arm
 PREBUILT=$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64
 
 : ${NDK?"Need to set NDK to android-ndk path"}
@@ -27,7 +27,9 @@ PREBUILT=$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64
 function build_now
 {
 ./configure \
-    --disable-shared \
+    --enable-shared \
+    --disable-static \
+    --enable-decoder=h264 \
     --enable-static \
     --enable-encoders \
     --enable-nonfree \
@@ -39,6 +41,7 @@ function build_now
     --enable-muxers \
     --enable-demuxers \
     --enable-swscale \
+    --enable-openssl \
     --enable-swscale-alpha \
     --disable-ffplay \
     --disable-ffprobe \
@@ -46,8 +49,8 @@ function build_now
     --enable-network \
     --enable-indevs \
     --disable-bsfs \
-    --enable-filters \
     --enable-avfilter \
+    --enable-openssl \
     --enable-protocols \
     --disable-asm \
     --enable-neon \
@@ -58,8 +61,8 @@ function build_now
     --cross-prefix=$PREBUILT/bin/arm-linux-androideabi- \
     --enable-cross-compile \
     --target-os=linux \
-    --extra-cflags="-I$PLATFORM/usr/include -I`pwd`/libavcodec -Wno-traditional" \
-    --extra-ldflags="-L$PLATFORM/usr/lib -nostdlib -Wl,-rpath-link=$PLATFORM/usr/lib" \
+    --extra-cflags="-I`pwd`/../boringssl/include -I$PLATFORM/usr/include -I`pwd`/libavcodec -Wno-traditional" \
+    --extra-ldflags=""-L`pwd`/../boringssl/build/dist/libs" -L$PREBUILT/lib/gcc/arm-linux-androideabi/4.9.x -lm -lc -lgcc -lc -landroid  -nostdlib -L$PLATFORM/usr/lib -Wl,-rpath-link=$PLATFORM/usr/lib" \
     --prefix="$PREFIX" \
     --arch=arm \
     --disable-symver \
@@ -90,7 +93,9 @@ make clean
 make -j4 install
 
 $PREBUILT/bin/arm-linux-androideabi-ar d libavcodec/libavcodec.a inverse.o
-$PREBUILT/bin/arm-linux-androideabi-ld -rpath-link=$PLATFORM/usr/lib -L$PLATFORM/usr/lib  -soname libffmpeg.so -shared -nostdlib  -z,noexecstack -Bsymbolic --whole-archive --no-undefined -o $PREFIX/libffmpeg.so libavcodec/libavcodec.a libavformat/libavformat.a libavutil/libavutil.a libswscale/libswscale.a -lc -lm -lz -ldl -llog  --warn-once  --dynamic-linker=/system/bin/linker $PREBUILT/lib/gcc/arm-linux-androideabi/4.4.3/libgcc.a
+$PREBUILT/bin/arm-linux-androideabi-ld -rpath-link=$PLATFORM/usr/lib -L$PLATFORM/usr/lib  -soname libffmpeg.so -shared -nostdlib  -z,noexecstack -Bsymbolic --whole-archive \
+--no-undefined -o $PREFIX/libffmpeg.so libavcodec/libavcodec.a libavformat/libavformat.a libavutil/libavutil.a libswscale/libswscale.a -lc -lm -lz -ldl -llog  --warn-once \
+ --dynamic-linker=/system/bin/linker $PREBUILT/lib/gcc/arm-linux-androideabi/4.9.x/libgcc.a
 }
 
 #arm v6
