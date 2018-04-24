@@ -34,7 +34,7 @@ ARCHS="armv7 arm64"
 COMPILE="y"
 LIPO="y"
 
-DEPLOYMENT_TARGET="6.0"
+DEPLOYMENT_TARGET="8.0"
 
 if [ "$*" ]
 then

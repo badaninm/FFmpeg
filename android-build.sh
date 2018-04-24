@@ -28,39 +28,18 @@ function build_now
 {
 ./configure \
     --enable-shared \
-    --disable-static \
     --enable-decoder=h264 \
     --enable-static \
-    --enable-encoders \
-    --enable-nonfree \
-    --enable-gpl \
-    --enable-version3 \
-    --enable-parsers \
-    --enable-encoders \
-    --enable-decoders \
-    --enable-muxers \
-    --enable-demuxers \
-    --enable-swscale \
+    --disable-doc \
     --enable-openssl \
-    --enable-swscale-alpha \
     --disable-ffplay \
     --disable-ffprobe \
-    --enable-ffserver \
-    --enable-network \
-    --enable-indevs \
-    --disable-bsfs \
-    --enable-avfilter \
-    --enable-openssl \
-    --enable-protocols \
     --disable-asm \
     --enable-neon \
-    --enable-nonfree \
     --enable-small --disable-debug --disable-programs \
-    --disable-doc \
-    --enable-small \
     --cross-prefix=$PREBUILT/bin/arm-linux-androideabi- \
     --enable-cross-compile \
-    --target-os=linux \
+    --target-os=android \
     --extra-cflags="-I`pwd`/../boringssl/include -I$PLATFORM/usr/include -I`pwd`/libavcodec -Wno-traditional" \
     --extra-ldflags=""-L`pwd`/../boringssl/build/dist/libs" -L$PREBUILT/lib/gcc/arm-linux-androideabi/4.9.x -lm -lc -lgcc -lc -landroid  -nostdlib -L$PLATFORM/usr/lib -Wl,-rpath-link=$PLATFORM/usr/lib" \
     --prefix="$PREFIX" \
