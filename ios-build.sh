@@ -12,9 +12,9 @@ THIN=`pwd`/"ios-thin"
 #X264=`pwd`/fat-x264
 
 #FDK_AAC=`pwd`/../fdk-aac-build-script-for-iOS/fdk-aac-ios
-
-CONFIGURE_FLAGS="--enable-cross-compile --optflags=-O3 --enable-small --enable-muxer=hls --enable-demuxer=hls --disable-debug --disable-programs \
-                 --disable-doc --enable-pic"
+z
+CONFIGURE_FLAGS="--enable-cross-compile --disable-all --disable-asm --optflags=-O3 --enable-small --disable-debug --disable-programs \
+                 --disable-doc "
 
 if [ "$X264" ]
 then
