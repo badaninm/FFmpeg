@@ -1045,7 +1045,7 @@ static const AVOption options[] = {
     { "segment_clocktime_offset", "set segment clocktime offset",        OFFSET(clocktime_offset), AV_OPT_TYPE_DURATION, {.i64 = 0}, 0, 86400000000LL, E},
     { "segment_clocktime_wrap_duration", "set segment clocktime wrapping duration", OFFSET(clocktime_wrap_duration), AV_OPT_TYPE_DURATION, {.i64 = INT64_MAX}, 0, INT64_MAX, E},
     { "segment_time",      "set segment duration",                       OFFSET(time_str),AV_OPT_TYPE_STRING, {.str = NULL},  0, 0,       E },
-    { "segment_time_delta","set approximation value used for the segment times", OFFSET(time_delta), AV_OPT_TYPE_DURATION, {.i64 = 0}, 0, 0, E },
+    { "segment_time_delta","set approximation value used for the segment times", OFFSET(time_delta), AV_OPT_TYPE_DURATION, {.i64 = 0}, 0, INT64_MAX, E },
     { "segment_times",     "set segment split time points",              OFFSET(times_str),AV_OPT_TYPE_STRING,{.str = NULL},  0, 0,       E },
     { "segment_frames",    "set segment split frame numbers",            OFFSET(frames_str),AV_OPT_TYPE_STRING,{.str = NULL},  0, 0,       E },
     { "segment_wrap",      "set number after which the index wraps",     OFFSET(segment_idx_wrap), AV_OPT_TYPE_INT, {.i64 = 0}, 0, INT_MAX, E },
@@ -1064,6 +1064,7 @@ static const AVOption options[] = {
     { NULL },
 };
 
+#if CONFIG_SEGMENT_MUXER
 static const AVClass seg_class = {
     .class_name = "segment muxer",
     .item_name  = av_default_item_name,
@@ -1084,7 +1085,9 @@ AVOutputFormat ff_segment_muxer = {
     .check_bitstream = seg_check_bitstream,
     .priv_class     = &seg_class,
 };
+#endif
 
+#if CONFIG_STREAM_SEGMENT_MUXER
 static const AVClass sseg_class = {
     .class_name = "stream_segment muxer",
     .item_name  = av_default_item_name,
@@ -1105,3 +1108,4 @@ AVOutputFormat ff_stream_segment_muxer = {
     .check_bitstream = seg_check_bitstream,
     .priv_class     = &sseg_class,
 };
+#endif
