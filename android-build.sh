@@ -27,16 +27,10 @@ PREBUILT=$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64
 function build_now
 {
 ./configure \
-    --enable-shared \
-    --enable-decoder=h264 \
-    --enable-static \
-    --disable-doc \
-    --enable-openssl \
-    --disable-ffplay \
-    --disable-ffprobe \
-    --disable-asm \
-    --enable-neon \
-    --enable-small --disable-debug --disable-programs \
+    --disable-x86asm --enable-cross-compile --disable-all --enable-ffmpeg --enable-small --enable-avcodec --enable-avformat --enable-avfilter --enable-swresample \
+--enable-swscale --enable-demuxer=hls,mpegts,rtsp,rtp --enable-decoder=h264,aac,ac3,aac_latm,aac_at,aac_fixed --enable-encoder=rawvideo,libx264 --enable-parser=h264 \
+--enable-protocol=http,https,rtmp,rtsp,file --enable-demuxer=mov --enable-muxer=rawvideo,mp4 --enable-hwaccel=h264_videotoolbox\
+--enable-gpl --disable-asm --optflags=-O3 --enable-small --disable-debug --disable-programs \
     --cross-prefix=$PREBUILT/bin/arm-linux-androideabi- \
     --enable-cross-compile \
     --target-os=android \

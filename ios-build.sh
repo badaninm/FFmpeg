@@ -12,8 +12,12 @@ THIN=`pwd`/"ios-thin"
 #X264=`pwd`/fat-x264
 
 #FDK_AAC=`pwd`/../fdk-aac-build-script-for-iOS/fdk-aac-ios
-z
-CONFIGURE_FLAGS="--enable-cross-compile --disable-all --disable-asm --optflags=-O3 --enable-small --disable-debug --disable-programs \
+#--enable-filter=scale 
+
+CONFIGURE_FLAGS="--enable-cross-compile --disable-all --enable-ffmpeg --enable-small --enable-avcodec --enable-avformat --enable-avfilter --enable-swresample \
+--enable-swscale --enable-demuxer=hls,mpegts,rtsp,rtp --enable-decoder=mp3,h264,aac,ac3,aac_latm,aac_at,aac_fixed --enable-encoder=rawvideo,libx264 --enable-parser=h264 \
+--enable-protocol=http,https,rtmp,rtsp,file --enable-demuxer=mov --enable-muxer=rawvideo,mp4 --enable-hwaccel=h264_videotoolbox\ghbdtn
+--enable-gpl --disable-asm --optflags=-O3 --enable-small --disable-debug --disable-programs --disable-pthreads\
                  --disable-doc "
 
 if [ "$X264" ]
