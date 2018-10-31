@@ -18,9 +18,9 @@
 ######################################################
 # change these three lines to adjust those to your local folders configuration
 
-NDK=~/android-ndk-r14b
-PLATFORM=$NDK/platforms/android-14/arch-arm
-PREBUILT=$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64
+NDK=~/ndk/android-ndk-r18b
+# --extra-ldflags=""-L`pwd`/../boringssl/build/dist/libs" -L$PREBUILT_LIB_PATH -v -lm -lc -lgcc -lc -landroid  -nostdlib -L$PLATFORM/usr/lib -Wl,-rpath-link=$PLATFORM/usr/lib" \
+
 
 : ${NDK?"Need to set NDK to android-ndk path"}
 
@@ -35,9 +35,9 @@ function build_now
     --enable-cross-compile \
     --target-os=android \
     --extra-cflags="-I`pwd`/../boringssl/include -I$PLATFORM/usr/include -I`pwd`/libavcodec -Wno-traditional" \
-    --extra-ldflags=""-L`pwd`/../boringssl/build/dist/libs" -L$PREBUILT/lib/gcc/arm-linux-androideabi/4.9.x -lm -lc -lgcc -lc -landroid  -nostdlib -L$PLATFORM/usr/lib -Wl,-rpath-link=$PLATFORM/usr/lib" \
+    --extra-ldflags=""-L`pwd`/../boringssl/build/dist/libs" -L$PREBUILT_LIB_PATH -v -lm -lc -lgcc -lc -landroid  -nostdlib -L$PLATFORM/usr/lib -Wl,-rpath-link=$PLATFORM/usr/lib" \
     --prefix="$PREFIX" \
-    --arch=arm \
+    --arch="$ARCH"\
     --disable-symver \
     --disable-debug \
     --disable-stripping \
@@ -84,15 +84,23 @@ CPU=armv7-a
 OPTIMIZE_CFLAGS="-mfloat-abi=softfp -mfpu=vfpv3-d16 -marm -march=$CPU "
 PREFIX=./android/$CPU
 ADDITIONAL_CONFIGURE_FLAG=
+PLATFORM=$NDK/platforms/android-21/arch-arm
+PREBUILT=$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64
+PREBUILT_LIB_PATH=$PREBUILT/lib/gcc/arm-linux-androideabi/4.9.x
+ARCH=arm
 build_now
 
 ###################################
-#arm v7vfp
-#CPU=armv7-a
+#arm v8-a
+#CPU=arm64
 #OPTIMIZE_CFLAGS="-mfloat-abi=softfp -mfpu=vfp -marm -march=$CPU "
-#PREFIX=./android/$CPU-vfp
+#PREFIX=./android/$CPU
 #ADDITIONAL_CONFIGURE_FLAG=
-#build_now
+#PLATFORM=$NDK/platforms/android-21/arch-arm64
+#PREBUILT=$NDK/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64
+#PREBUILT_LIB_PATH=$PREBUILT/lib/gcc/aarch64-linux-android/4.9.x
+#ARCH=arm64
+build_now
 
 ###################################
 #arm v7n
