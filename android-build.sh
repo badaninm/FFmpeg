@@ -27,15 +27,18 @@ NDK=~/ndk/android-ndk-r18b
 function build_now
 {
 ./configure \
-    --disable-x86asm --enable-cross-compile --disable-all --enable-ffmpeg --enable-small --enable-avcodec --enable-avformat --enable-avfilter --enable-swresample \
---enable-swscale --enable-demuxer=hls,mpegts,rtsp,rtp --enable-decoder=h264,aac,ac3,aac_latm,aac_at,aac_fixed --enable-encoder=rawvideo,libx264 --enable-parser=h264 \
---enable-protocol=http,https,rtmp,rtsp,file --enable-demuxer=mov --enable-muxer=rawvideo,mp4 --enable-hwaccel=h264_videotoolbox\
+    --disable-x86asm --enable-cross-compile --disable-all --enable-ffmpeg --enable-pthreads --enable-jni --enable-mediacodec --enable-small --enable-avcodec --enable-avformat --enable-avfilter --enable-swresample \
+--enable-swscale --enable-demuxer=hls,mpegts,rtsp,rtp --enable-decoder=h264,aac,ac3,aac_latm,aac_at,aac_fixed,h264_mediacodec --enable-encoder=rawvideo,libx264 --enable-parser=h264 \
+--enable-protocol=http,https,rtmp,rtsp,file --enable-demuxer=mov --enable-muxer=rawvideo,mp4 \
 --enable-gpl --disable-asm --optflags=-O3 --enable-small --disable-debug --disable-programs \
-    --cross-prefix=$PREBUILT/bin/arm-linux-androideabi- \
+    --cross-prefix=$PREBUILT/bin/$ARCHSUBFOLDER- \
+    --cc=$PREBUILT/bin/$ARCHSUBFOLDER-gcc \
+    --nm=$PREBUILT/bin/$ARCHSUBFOLDER-nm \
+    --ld=$PREBUILT/bin/$ARCHSUBFOLDER-ld \
     --enable-cross-compile \
     --target-os=android \
-    --extra-cflags="-I`pwd`/../boringssl/include -I$PLATFORM/usr/include -I`pwd`/libavcodec -Wno-traditional" \
-    --extra-ldflags=""-L`pwd`/../boringssl/build/dist/libs" -L$PREBUILT_LIB_PATH -v -lm -lc -lgcc -lc -landroid  -nostdlib -L$PLATFORM/usr/lib -Wl,-rpath-link=$PLATFORM/usr/lib" \
+    --extra-cflags="-I`pwd`/../boringssl/include -I$PLATFORM/usr/include  -I$NDK/sysroot/usr/include/ -I$NDK/sysroot/usr/include/$ARCHSUBFOLDER -I`pwd`/libavcodec -Wmacro-redefined" \
+    --extra-ldflags=""-L`pwd`/../boringssl/build/dist/libs" -L$PREBUILT_LIB_PATH -v -lm -lc -lgcc -lc -landroid -nostdlib -L$PLATFORM/usr/lib -rpath-link=$PLATFORM/usr/lib" \
     --prefix="$PREFIX" \
     --arch="$ARCH"\
     --disable-symver \
@@ -43,6 +46,8 @@ function build_now
     --disable-stripping \
     $ADDITIONAL_CONFIGURE_FLAG
 
+sed -i '.bak' 's/HAVE_INET_ATON 0/HAVE_INET_ATON 1/g' config.h
+sed -i '.bak' 's/HAVE_CBRTF 0/HAVE_CBRTF 1/g' config.h
 sed -i '.bak' 's/HAVE_CBRT 0/HAVE_CBRT 1/g' config.h
 sed -i '.bak' 's/HAVE_ISINF 0/HAVE_ISINF 1/g' config.h
 sed -i '.bak' 's/HAVE_ISNAN 0/HAVE_ISNAN 1/g' config.h
@@ -68,7 +73,7 @@ make -j4 install
 $PREBUILT/bin/arm-linux-androideabi-ar d libavcodec/libavcodec.a inverse.o
 $PREBUILT/bin/arm-linux-androideabi-ld -rpath-link=$PLATFORM/usr/lib -L$PLATFORM/usr/lib  -soname libffmpeg.so -shared -nostdlib  -z,noexecstack -Bsymbolic --whole-archive \
 --no-undefined -o $PREFIX/libffmpeg.so libavcodec/libavcodec.a libavformat/libavformat.a libavutil/libavutil.a libswscale/libswscale.a -lc -lm -lz -ldl -llog  --warn-once \
- --dynamic-linker=/system/bin/linker $PREBUILT/lib/gcc/arm-linux-androideabi/4.9.x/libgcc.a
+ --dynamic-linker=/system/bin/linker $PREBUILT_LIB_PATH/libgcc.a
 }
 
 #arm v6
@@ -87,19 +92,21 @@ ADDITIONAL_CONFIGURE_FLAG=
 PLATFORM=$NDK/platforms/android-21/arch-arm
 PREBUILT=$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64
 PREBUILT_LIB_PATH=$PREBUILT/lib/gcc/arm-linux-androideabi/4.9.x
+ARCHSUBFOLDER=arm-linux-androideabi
 ARCH=arm
-build_now
+#build_now
 
 ###################################
 #arm v8-a
-#CPU=arm64
-#OPTIMIZE_CFLAGS="-mfloat-abi=softfp -mfpu=vfp -marm -march=$CPU "
-#PREFIX=./android/$CPU
-#ADDITIONAL_CONFIGURE_FLAG=
-#PLATFORM=$NDK/platforms/android-21/arch-arm64
-#PREBUILT=$NDK/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64
-#PREBUILT_LIB_PATH=$PREBUILT/lib/gcc/aarch64-linux-android/4.9.x
-#ARCH=arm64
+CPU=arm64
+OPTIMIZE_CFLAGS="-mfloat-abi=softfp -mfpu=vfp -marm -march=$CPU "
+PREFIX=./android/$CPU
+ADDITIONAL_CONFIGURE_FLAG=
+PLATFORM=$NDK/platforms/android-21/arch-arm64
+PREBUILT=$NDK/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64
+PREBUILT_LIB_PATH=$PREBUILT/lib/gcc/aarch64-linux-android/4.9.x
+ARCHSUBFOLDER=aarch64-linux-android
+ARCH=aarch64
 build_now
 
 ###################################
