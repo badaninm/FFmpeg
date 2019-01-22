@@ -37,8 +37,8 @@ function build_now
     --ld=$PREBUILT/bin/$ARCHSUBFOLDER-ld \
     --enable-cross-compile \
     --target-os=android \
-    --extra-cflags="-I`pwd`/../boringssl/include -I$PLATFORM/usr/include  -I$NDK/sysroot/usr/include/ -I$NDK/sysroot/usr/include/$ARCHSUBFOLDER -I`pwd`/libavcodec -Wmacro-redefined" \
-    --extra-ldflags=""-L`pwd`/../boringssl/build/dist/libs" -L$PREBUILT_LIB_PATH -v -lm -lc -lgcc -lc -landroid -nostdlib -L$PLATFORM/usr/lib -rpath-link=$PLATFORM/usr/lib" \
+    --extra-cflags="-I`pwd`/../boringssl/include -I$PLATFORM/usr/include  -I$NDK/sysroot/usr/include/ -I$NDK/sysroot/usr/include/$ARCHSUBFOLDER -I`pwd`/libavcodec -Wmacro-redefined" -D__ANDROID_API__=$API_LEVEL\
+    --extra-ldflags=""-L`pwd`/../boringssl/build/dist/libs" -L$PREBUILT_LIB_PATH -v -lm -lc -lgcc -lc -landroid -L$PLATFORM/usr/lib -rpath-link=$PLATFORM/usr/lib" \
     --prefix="$PREFIX" \
     --arch="$ARCH"\
     --disable-symver \
@@ -68,10 +68,10 @@ sed -i '.bak' 's/HAVE_LOCALTIME_R 0/HAVE_LOCALTIME_R 1/g' config.h
 
 
 make clean
-make -j4 install
+make -j7 install
 
-$PREBUILT/bin/arm-linux-androideabi-ar d libavcodec/libavcodec.a inverse.o
-$PREBUILT/bin/arm-linux-androideabi-ld -rpath-link=$PLATFORM/usr/lib -L$PLATFORM/usr/lib  -soname libffmpeg.so -shared -nostdlib  -z,noexecstack -Bsymbolic --whole-archive \
+$PREBUILT/bin/$ARCHSUBFOLDER-ar d libavcodec/libavcodec.a inverse.o
+$PREBUILT/bin/$ARCHSUBFOLDER-ld -rpath-link=$PLATFORM/usr/lib -L$PLATFORM/usr/lib  -soname libffmpeg.so -shared  --noexecstack -Bsymbolic --whole-archive \
 --no-undefined -o $PREFIX/libffmpeg.so libavcodec/libavcodec.a libavformat/libavformat.a libavutil/libavutil.a libswscale/libswscale.a -lc -lm -lz -ldl -llog  --warn-once \
  --dynamic-linker=/system/bin/linker $PREBUILT_LIB_PATH/libgcc.a
 }
@@ -89,12 +89,13 @@ CPU=armv7-a
 OPTIMIZE_CFLAGS="-mfloat-abi=softfp -mfpu=vfpv3-d16 -marm -march=$CPU "
 PREFIX=./android/$CPU
 ADDITIONAL_CONFIGURE_FLAG=
-PLATFORM=$NDK/platforms/android-21/arch-arm
+API_LEVEL=19
+PLATFORM=$NDK/platforms/android-19/arch-arm
 PREBUILT=$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64
 PREBUILT_LIB_PATH=$PREBUILT/lib/gcc/arm-linux-androideabi/4.9.x
 ARCHSUBFOLDER=arm-linux-androideabi
 ARCH=arm
-#build_now
+build_now
 
 ###################################
 #arm v8-a
@@ -102,12 +103,13 @@ CPU=arm64
 OPTIMIZE_CFLAGS="-mfloat-abi=softfp -mfpu=vfp -marm -march=$CPU "
 PREFIX=./android/$CPU
 ADDITIONAL_CONFIGURE_FLAG=
-PLATFORM=$NDK/platforms/android-21/arch-arm64
+API_LEVEL=19
+PLATFORM=$NDK/platforms/android-19/arch-arm64
 PREBUILT=$NDK/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64
 PREBUILT_LIB_PATH=$PREBUILT/lib/gcc/aarch64-linux-android/4.9.x
 ARCHSUBFOLDER=aarch64-linux-android
 ARCH=aarch64
-build_now
+#build_now
 
 ###################################
 #arm v7n

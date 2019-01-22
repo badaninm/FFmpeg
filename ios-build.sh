@@ -15,7 +15,8 @@ THIN=`pwd`/"ios-thin"
 #--enable-filter=scale 
 
 CONFIGURE_FLAGS="--enable-cross-compile --disable-all --enable-ffmpeg --enable-small --enable-avcodec --enable-avformat --enable-avfilter --enable-swresample \
---enable-swscale --enable-demuxer=hls,mpegts,rtsp,rtp --enable-decoder=mp3,h264,aac,ac3,aac_latm,aac_at,aac_fixed --enable-encoder=rawvideo,libx264 --enable-parser=h264 \
+--enable-swscale --enable-demuxer=hls,mpegts,rtsp,rtp --enable-decoder=mp3,h264,h264_crystalhd,h264_cuvid,h264_mediacodec,h264_mmal,h264_qsv,h264_rkmpp,\
+h264_v4l2m2m,aac,ac3,aac_latm,aac_at,aac_fixed --enable-encoder=rawvideo,libx264 --enable-parser=h264 \
 --enable-protocol=http,https,rtmp,rtsp,file --enable-demuxer=mov --enable-muxer=rawvideo,mp4 --enable-hwaccel=h264_videotoolbox \
 --enable-gpl --disable-asm --optflags=-O3 --enable-small --disable-debug --disable-programs --disable-pthreads \
                  --disable-doc "
