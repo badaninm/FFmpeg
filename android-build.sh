@@ -37,7 +37,7 @@ function build_now
     --ld=$PREBUILT/bin/$ARCHSUBFOLDER-ld \
     --enable-cross-compile \
     --target-os=android \
-    --extra-cflags="-I`pwd`/../boringssl/include -I$PLATFORM/usr/include  -I$NDK/sysroot/usr/include/ -I$NDK/sysroot/usr/include/$ARCHSUBFOLDER -I`pwd`/libavcodec -Wmacro-redefined" -D__ANDROID_API__=$API_LEVEL\
+    --extra-cflags="-I`pwd`/../boringssl/include -I$PLATFORM/usr/include  -I$NDK/sysroot/usr/include/ -I$NDK/sysroot/usr/include/$ARCHSUBFOLDER -I`pwd`/libavcodec -Wmacro-redefined" -D __ANDROID_API__=$API_LEVEL\
     --extra-ldflags=""-L`pwd`/../boringssl/build/dist/libs" -L$PREBUILT_LIB_PATH -v -lm -lc -lgcc -lc -landroid -L$PLATFORM/usr/lib -rpath-link=$PLATFORM/usr/lib" \
     --prefix="$PREFIX" \
     --arch="$ARCH"\
