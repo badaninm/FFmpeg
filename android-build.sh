@@ -18,7 +18,7 @@
 ######################################################
 # change these three lines to adjust those to your local folders configuration
 
-NDK=/usr/local/Caskroom/android-ndk/18/android-ndk-r18
+NDK=~/ndk/android-ndk-r18b
 # --extra-ldflags=""-L`pwd`/../boringssl/build/dist/libs" -L$PREBUILT_LIB_PATH -v -lm -lc -lgcc -lc -landroid  -nostdlib -L$PLATFORM/usr/lib -Wl,-rpath-link=$PLATFORM/usr/lib" \
 
 
