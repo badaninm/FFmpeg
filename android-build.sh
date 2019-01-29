@@ -18,7 +18,7 @@
 ######################################################
 # change these three lines to adjust those to your local folders configuration
 
-NDK=~/ndk/android-ndk-r18b
+NDK=/usr/local/Caskroom/android-ndk/18/android-ndk-r18
 # --extra-ldflags=""-L`pwd`/../boringssl/build/dist/libs" -L$PREBUILT_LIB_PATH -v -lm -lc -lgcc -lc -landroid  -nostdlib -L$PLATFORM/usr/lib -Wl,-rpath-link=$PLATFORM/usr/lib" \
 
 
@@ -27,7 +27,7 @@ NDK=~/ndk/android-ndk-r18b
 function build_now
 {
 ./configure \
-    --disable-x86asm --enable-cross-compile --disable-all --enable-ffmpeg --enable-pthreads --enable-jni --enable-mediacodec --enable-small --enable-avcodec --enable-avformat --enable-avfilter --enable-swresample \
+    --disable-x86asm --enable-cross-compile --disable-all --enable-ffmpeg --enable-pthreads --enable-jni --enable-mediacodec --enable-small --enable-avcodec --enable-avformat --enable-avfilter --enable-swresample --enable-openssl --enable-nonfree \
 --enable-swscale --enable-demuxer=hls,mpegts,rtsp,rtp --enable-decoder=h264,aac,ac3,aac_latm,aac_at,aac_fixed,h264_mediacodec --enable-encoder=rawvideo,libx264 --enable-parser=h264 \
 --enable-protocol=http,https,rtmp,rtsp,file --enable-demuxer=mov --enable-muxer=rawvideo,mp4 \
 --enable-gpl --disable-asm --optflags=-O3 --enable-small --disable-debug --disable-programs \
@@ -71,9 +71,9 @@ make clean
 make -j7 install
 
 $PREBUILT/bin/$ARCHSUBFOLDER-ar d libavcodec/libavcodec.a inverse.o
-$PREBUILT/bin/$ARCHSUBFOLDER-ld -rpath-link=$PLATFORM/usr/lib -L$PLATFORM/usr/lib  -soname libffmpeg.so -shared  --noexecstack -Bsymbolic --whole-archive \
---no-undefined -o $PREFIX/libffmpeg.so libavcodec/libavcodec.a libavformat/libavformat.a libavutil/libavutil.a libswscale/libswscale.a -lc -lm -lz -ldl -llog  --warn-once \
- --dynamic-linker=/system/bin/linker $PREBUILT_LIB_PATH/libgcc.a
+#$PREBUILT/bin/$ARCHSUBFOLDER-ld -rpath-link=$PLATFORM/usr/lib -L$PLATFORM/usr/lib -shared -soname libffmpeg.so -Bsymbolic --whole-archive \
+#--no-undefined -o $PREFIX/libffmpeg.so libavcodec/libavcodec.a libavformat/libavformat.a libavutil/libavutil.a libswscale/libswscale.a -lc -lm -lz -ldl -llog  --warn-once \
+#--dynamic-linker=/system/bin/linker $PREBUILT_LIB_PATH/libgcc.a
 }
 
 #arm v6
